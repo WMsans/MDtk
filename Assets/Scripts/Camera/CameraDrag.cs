@@ -12,24 +12,28 @@ public class CameraDrag : MonoBehaviour
     public float friction = 0.9f;
 
     // Current velocity of the camera (in screen space, converted during Update)
-    private Vector3 _currentVelocity;
+    private Vector2 _currentVelocity;
 
     // Called by DragTrigger to update the camera's velocity
-    public void AddDragVelocity(Vector3 mouseDelta)
+    public void AddDragVelocity(Vector2 mouseDelta)
     {
         // Multiply the delta by the drag speed to set the new velocity
         // (You could add if you want to accumulate velocity instead)
         _currentVelocity = mouseDelta * dragSpeed;
     }
 
-    void Update()
+    public void SetDragSpeed(float dragSpeed)
+    {
+        this.dragSpeed = dragSpeed;
+    }
+    void LateUpdate()
     {
         // Convert currentVelocity (which is in screen-space units) to world movement.
         // For a simple orthographic top-down camera, you can translate directly.
         // For a perspective camera, you might need a different approach (e.g. raycasting or a transform.right/up projection).
 
         // Here we assume an orthographic or top-down perspective and move along X/Y in world space:
-        transform.Translate(_currentVelocity * Time.deltaTime, Space.World);
+        transform.Translate(_currentVelocity * Time.deltaTime);
 
         // Apply friction to slow down the camera over time
         _currentVelocity *= friction;
