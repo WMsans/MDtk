@@ -60,10 +60,9 @@ namespace Michsky.MUIP
             { 
                 onSubmit.Invoke();
 
-                if (clearOnSubmit) 
+                if (clearOnSubmit)
                 {
-                    inputText.text = ""; 
-                    UpdateState();
+                    ClearText();
                 } 
             }
 #elif ENABLE_INPUT_SYSTEM
@@ -73,8 +72,7 @@ namespace Michsky.MUIP
                 
                 if (clearOnSubmit) 
                 { 
-                    inputText.text = ""; 
-                    UpdateState();
+                    ClearText();
                 } 
             }
 #endif
@@ -143,6 +141,12 @@ namespace Michsky.MUIP
         {
             yield return new WaitForSecondsRealtime(cachedDuration);
             inputFieldAnimator.enabled = false;
+        }
+
+        public void ClearText()
+        {
+            inputText.text = ""; 
+            UpdateState();
         }
     }
 }

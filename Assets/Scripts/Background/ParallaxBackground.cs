@@ -5,6 +5,7 @@ using UnityEngine;
 public class ParallaxBackground : MonoBehaviour
 {
     [SerializeField] ParallaxCamera parallaxCamera;
+    [SerializeField] bool startAtCameraPosition;
     private List<ParallaxLayer> parallaxLayers;
  
     void Start()
@@ -23,16 +24,15 @@ public class ParallaxBackground : MonoBehaviour
     {
         parallaxLayers = new();
  
-        for (int i = 0; i < transform.childCount; i++)
+        for (var i = 0; i < transform.childCount; i++)
         {
-            ParallaxLayer layer = transform.GetChild(i).GetComponent<ParallaxLayer>();
- 
-            if (layer != null)
-            {
-                layer.name = "Layer-" + i;
-                parallaxLayers.Add(layer);
-            }
+            var layer = transform.GetChild(i).GetComponent<ParallaxLayer>();
+
+            if (layer == null) continue;
+            layer.name = "Layer-" + i;
+            parallaxLayers.Add(layer);
         }
+        if(startAtCameraPosition) SetBackgroundPosition();
     }
  
     void Move(Vector2 delta)
@@ -40,6 +40,17 @@ public class ParallaxBackground : MonoBehaviour
         foreach (ParallaxLayer layer in parallaxLayers)
         {
             layer.Move(delta);
+        }
+    }
+
+    public void SetBackgroundPosition()
+    {
+        for (var i = 0; i < transform.childCount; i++)
+        {
+            var layer = transform.GetChild(i).GetComponent<ParallaxLayer>();
+
+            if (layer == null) continue;
+            layer.transform.position = (Vector2)parallaxCamera.transform.position;
         }
     }
 }
