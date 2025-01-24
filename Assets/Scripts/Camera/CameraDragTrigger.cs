@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LevelDragTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class CameraDragTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public static LevelDragTrigger Instance { get; private set; }
+    public static CameraDragTrigger Instance { get; private set; }
     private void Awake()
     {
         if (Instance != null)

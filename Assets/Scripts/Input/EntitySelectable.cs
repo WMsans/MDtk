@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using DG.Tweening;
 using EPOOutline;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EntitySelectable : MonoBehaviour
 {
     private Outlinable _outlinable;
     public bool IsHovered { get; private set; } = false;
 
-    public List<EntityProperty<PropertyValue>> Properties /*{ get; private set; }*/ = new()
+    public List<EntityProperty<PropertyValue>> properties /*{ get; private set; }*/ = new()
     {
         new()
         {
@@ -51,11 +52,16 @@ public class EntitySelectable : MonoBehaviour
     }
     public void AddProperty(EntityProperty<PropertyValue> property)
     {
-        Properties.Add(property);
+        properties.Add(property);
     }
     public void RemoveProperty(int index)
     {
-        Properties.RemoveAt(index);
+        properties.RemoveAt(index);
+    }
+
+    public PropertyValue GetPropertyValue(string identifier)
+    {
+        return properties.Find(x => x.Identifier == identifier).Value;
     }
     private void SetOutline(bool active)
     {

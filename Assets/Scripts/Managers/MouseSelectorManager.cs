@@ -15,7 +15,7 @@ public class MouseSelectorManager : MonoBehaviour
         }
         Instance = this;
     }
-    public bool IsPointerOverUIElement => !LevelDragTrigger.Instance.Dragable;
+    public bool IsPointerOverUIElement => !CameraDragTrigger.Instance.Dragable;
 
     public void SelectEntity(EntitySelectable entity)
     {
