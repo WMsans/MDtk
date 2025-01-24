@@ -22,6 +22,9 @@ public class PrefabSpawner : MonoBehaviour
         if(!prefab) return;
         var obj = Instantiate(prefab);
         obj.transform.position = transform.position;
+        var behaviour = obj.GetComponent<EntitySelectable>();
+        if(!behaviour) return;
+        EntityManager.Instance.AddEntity(behaviour);
     }
 
     private void Update()

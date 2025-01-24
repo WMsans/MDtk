@@ -36,12 +36,16 @@ public class EntitySelectable : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (IsHovered)
+        if (IsHovered && !MouseSelectorManager.Instance.IsPointerOverUIElement)
         {
-            MouseSelectorManager.Instance.SelectEntity(this);
+            SelectThis();
         }
     }
 
+    public void SelectThis()
+    {
+        MouseSelectorManager.Instance.SelectEntity(this);
+    }
     public void OnSelected()
     {
         SetOutline(true);
@@ -62,6 +66,11 @@ public class EntitySelectable : MonoBehaviour
     public PropertyValue GetPropertyValue(string identifier)
     {
         return properties.Find(x => x.Identifier == identifier).Value;
+    }
+    public void SetPropertyValue(string identifier, PropertyValue value)
+    {
+        var property = properties.Find(x => x.Identifier == identifier);
+        property.Value = value;
     }
     private void SetOutline(bool active)
     {

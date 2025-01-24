@@ -22,4 +22,12 @@ public class IntProperty : PropertyValue
             Debug.LogWarning("Bad format for int");
         }
     }
+    public IntProperty(int value)
+    {
+        _value = value;
+    }
+    public IntProperty()
+    {
+        _value = 0;
+    }
 }

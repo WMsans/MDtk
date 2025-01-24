@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,7 +25,10 @@ public class TeleportManager : MonoBehaviour
     }
     public void Teleport(Vector2 position)
     {
-        _camera.transform.position = position;
+        //_camera.transform.position = new (position.x, position.y, _camera.transform.position.z);
+        DOTween.To(() => _camera.transform.position, x => _camera.transform.position = x, new(position.x, position.y, _camera.transform.position.z), 0.2f);
+        CameraDrag.Instance.SetVelocity(Vector2.zero);
+        onTeleport.Invoke(_camera.transform.position);
     }
 
     public void TeleportX(string positionX)
@@ -32,8 +36,8 @@ public class TeleportManager : MonoBehaviour
         if (Camera.main != null)
             try
             {
-                _camera.transform.position = new(float.Parse(positionX), _camera.transform.position.y,
-                    _camera.transform.position.z);
+                //_camera.transform.position = new(float.Parse(positionX), _camera.transform.position.y, _camera.transform.position.z);
+                DOTween.To(() => _camera.transform.position, x => _camera.transform.position = x, new(float.Parse(positionX), _camera.transform.position.y, _camera.transform.position.z), 0.2f);
             }
             catch (System.Exception)
             {
@@ -48,8 +52,8 @@ public class TeleportManager : MonoBehaviour
         if (Camera.main != null)
             try
             {
-                _camera.transform.position = new(_camera.transform.position.x, float.Parse(positionY),
-                    _camera.transform.position.z);
+                //_camera.transform.position = new(_camera.transform.position.x, float.Parse(positionY), _camera.transform.position.z);
+                DOTween.To(() => _camera.transform.position, x => _camera.transform.position = x, new(_camera.transform.position.x, float.Parse(positionY), _camera.transform.position.z), 0.2f);
             }
             catch (System.Exception)
             {

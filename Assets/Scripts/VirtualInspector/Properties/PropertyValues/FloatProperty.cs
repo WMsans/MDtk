@@ -22,4 +22,12 @@ public class FloatProperty : PropertyValue
             Debug.LogWarning("Bad format for float");
         }
     }
+    public FloatProperty(float value)
+    {
+        _value = value;
+    }
+    public FloatProperty()
+    {
+        _value = 0f;
+    }
 }

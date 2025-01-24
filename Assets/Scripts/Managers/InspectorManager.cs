@@ -64,9 +64,8 @@ public class InspectorManager : MonoBehaviour
         {
             lineRenderer.enabled = true; 
             DOTween.To(() => lineRenderer.GetPosition(0), x => lineRenderer.SetPosition(0, x), _selectedEntity.transform.position, 0.25f);
-            DOTween.To(() => lineRenderer.GetPosition(1), x => lineRenderer.SetPosition(1, x), new(Camera.main.ScreenToWorldPoint(inspector.transform.position).x, Camera.main.ScreenToWorldPoint(inspector.transform.position).y), 0.25f);
             //lineRenderer.SetPosition(0, _selectedEntity.transform.position);
-            //lineRenderer.SetPosition(1, (Vector2)Camera.main.ScreenToWorldPoint(inspector.transform.position));
+            lineRenderer.SetPosition(1, (Vector2)Camera.main.ScreenToWorldPoint(inspector.transform.position));
         }
         else
         {

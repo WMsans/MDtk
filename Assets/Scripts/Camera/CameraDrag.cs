@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class CameraDrag : MonoBehaviour
 {
+    public static CameraDrag Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
+    }
     [Header("Movement Settings")]
     [Tooltip("Multiplies how quickly the camera moves while dragging.")]
     public float dragSpeed = 0.2f;
@@ -25,6 +35,10 @@ public class CameraDrag : MonoBehaviour
     public void SetDragSpeed(float dragSpeed)
     {
         this.dragSpeed = dragSpeed;
+    }
+    public void SetVelocity(Vector2 velocity)
+    {
+        _currentVelocity = velocity;
     }
     void LateUpdate()
     {
