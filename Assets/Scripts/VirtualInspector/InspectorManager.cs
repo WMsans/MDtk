@@ -23,19 +23,24 @@ public class InspectorManager : MonoBehaviour
     {
         inspector.SetActive(false);
         _isSelecting = false;
-        _selectedEntity.SetOutline(false);
+        _selectedEntity.OnDeselected();
         _selectedEntity = null;
     }
     public void OpenInspector(EntitySelectable entity)
     {
         inspector.SetActive(true);
         _isSelecting = true;
-        if(_selectedEntity) _selectedEntity.SetOutline(false);
+        if(_selectedEntity) _selectedEntity.OnDeselected();
         _selectedEntity = entity;
-        _selectedEntity.SetOutline(true);
+        _selectedEntity.OnSelected();
     }
 
     private void Update()
+    {
+        HandleLineRenderer();
+    }
+
+    private void HandleLineRenderer()
     {
         if (_isSelecting)
         {

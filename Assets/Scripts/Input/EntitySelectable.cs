@@ -9,6 +9,15 @@ public class EntitySelectable : MonoBehaviour
     private Outlinable _outlinable;
     public bool IsHovered { get; private set; } = false;
 
+    public List<EntityProperty<PropertyValue>> Properties /*{ get; private set; }*/ = new()
+    {
+        new()
+        {
+            Identifier = "Name",
+            Value = new StringProperty("EntityName")
+        }
+    };
+
     private void Start()
     {
         _outlinable = GetComponent<Outlinable>();
@@ -32,7 +41,23 @@ public class EntitySelectable : MonoBehaviour
         }
     }
 
-    public void SetOutline(bool active)
+    public void OnSelected()
+    {
+        SetOutline(true);
+    }
+    public void OnDeselected()
+    {
+        SetOutline(false);
+    }
+    public void AddProperty(EntityProperty<PropertyValue> property)
+    {
+        Properties.Add(property);
+    }
+    public void RemoveProperty(int index)
+    {
+        Properties.RemoveAt(index);
+    }
+    private void SetOutline(bool active)
     {
         if (active)
         {
