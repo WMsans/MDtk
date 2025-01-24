@@ -5,6 +5,16 @@ using UnityEngine.Events;
 
 public class TeleportManager : MonoBehaviour
 {
+    public static TeleportManager Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
+    }
     Camera _camera;
     public UnityEvent<Vector2> onTeleport;
 

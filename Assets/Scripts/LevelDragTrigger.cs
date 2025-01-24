@@ -5,40 +5,50 @@ using UnityEngine.EventSystems;
 
 public class LevelDragTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public static LevelDragTrigger Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
+    }
     [SerializeField] private CameraDrag cameraDrag;
     [SerializeField] private float lastMaxDeltaTime = 0.1f;
 
     private Vector2 _lastMousePosition;
-    private bool _dragable = false;
-    private bool _isDragging = false;
+    public bool Dragable { get; private set; } = false;
+    public bool IsDragging { get; private set; } = false;
     private float _currentZoom = 1f;
     private Vector2 _lastMaxDelta = Vector2.zero;
     private float _lastMaxDeltaTimer = 0f;
     void Update()
     {
         // Check for right mouse button down
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             // If the mouse is over this object, we want to start dragging
-            if (_dragable) 
+            if (Dragable) 
             {
-                _isDragging = true;
+                IsDragging = true;
                 _lastMousePosition = GetMousePosition();
             }
         }
         // Check for right mouse button up
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(1))
         {
-            if(_isDragging)
+            if(IsDragging)
             {
-                _isDragging = false;
+                IsDragging = false;
                 cameraDrag.AddDragVelocity(-_lastMaxDelta);
             }
         }
         // Get the current zoom
         _currentZoom = Camera.main ? Camera.main.orthographicSize : 1f;
         // If dragging, calculate mouse delta and pass it to the camera script
-        if (_isDragging)
+        if (IsDragging)
         {
             var currentMousePosition = GetMousePosition();
             var mouseDelta = currentMousePosition - _lastMousePosition;
@@ -61,11 +71,11 @@ public class LevelDragTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _dragable = true;
+        Dragable = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _dragable = false;
+        Dragable = false;
     }
 }

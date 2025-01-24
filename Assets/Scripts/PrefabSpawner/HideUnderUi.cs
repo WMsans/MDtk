@@ -25,6 +25,6 @@ public class HideUnderUi : MonoBehaviour
     }
     private bool IsPointerOverUIElement()
     {
-        return EventSystem.current.IsPointerOverGameObject();
+        return MouseSelectorManager.Instance.IsPointerOverUIElement || MouseSelectorManager.Instance.IsSelecting;
     }
 }
