@@ -8,7 +8,7 @@ public class InspectorManager : MonoBehaviour
     public GameObject inspector;
     [SerializeField] private LineRenderer lineRenderer;
     private bool _isSelecting;
-    private GameObject _selectedEntity;
+    private EntitySelectable _selectedEntity;
     private void Awake()
     {
         if (Instance != null)
@@ -23,13 +23,16 @@ public class InspectorManager : MonoBehaviour
     {
         inspector.SetActive(false);
         _isSelecting = false;
+        _selectedEntity.SetOutline(false);
         _selectedEntity = null;
     }
-    public void OpenInspector(GameObject entity)
+    public void OpenInspector(EntitySelectable entity)
     {
         inspector.SetActive(true);
         _isSelecting = true;
+        if(_selectedEntity) _selectedEntity.SetOutline(false);
         _selectedEntity = entity;
+        _selectedEntity.SetOutline(true);
     }
 
     private void Update()
@@ -38,6 +41,11 @@ public class InspectorManager : MonoBehaviour
         {
             lineRenderer.SetPosition(0, _selectedEntity.transform.position);
             lineRenderer.SetPosition(1, (Vector2)Camera.main.ScreenToWorldPoint(inspector.transform.position));
+        }
+        else
+        {
+            lineRenderer.SetPosition(0, Vector3.zero);
+            lineRenderer.SetPosition(1, Vector3.zero);
         }
     }
 }

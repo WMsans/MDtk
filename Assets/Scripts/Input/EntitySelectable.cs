@@ -1,10 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using EPOOutline;
 using UnityEngine;
 
 public class EntitySelectable : MonoBehaviour
 {
+    private Outlinable _outlinable;
     public bool IsHovered { get; private set; } = false;
+
+    private void Start()
+    {
+        _outlinable = GetComponent<Outlinable>();
+    }
     private void OnMouseOver()
     {
         IsHovered = true;
@@ -20,7 +28,23 @@ public class EntitySelectable : MonoBehaviour
     {
         if (IsHovered)
         {
-            MouseSelectorManager.Instance.SelectEntity(gameObject);
+            MouseSelectorManager.Instance.SelectEntity(this);
+        }
+    }
+
+    public void SetOutline(bool active)
+    {
+        if (active)
+        {
+            if(_outlinable.OutlineParameters.Enabled) return;
+            _outlinable.OutlineParameters.Enabled = true;
+            _outlinable.OutlineParameters.Color = new(_outlinable.OutlineParameters.Color.r, _outlinable.OutlineParameters.Color.g, _outlinable.OutlineParameters.Color.b, 0f);
+            DOTween.To(() => _outlinable.OutlineParameters.Color.a, x => _outlinable.OutlineParameters.Color = new(_outlinable.OutlineParameters.Color.r, _outlinable.OutlineParameters.Color.g, _outlinable.OutlineParameters.Color.b, x), 1f, 0.25f);
+        }
+        else
+        {
+            if (!_outlinable.OutlineParameters.Enabled) return;
+            DOTween.To(() => _outlinable.OutlineParameters.Color.a, x => _outlinable.OutlineParameters.Color = new(_outlinable.OutlineParameters.Color.r, _outlinable.OutlineParameters.Color.g, _outlinable.OutlineParameters.Color.b, x), 0f, 0.25f).OnComplete(() => _outlinable.OutlineParameters.Enabled = false);
         }
     }
 }

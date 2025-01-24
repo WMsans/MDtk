@@ -17,9 +17,14 @@ public class MouseSelectorManager : MonoBehaviour
     }
     public bool IsPointerOverUIElement => !LevelDragTrigger.Instance.Dragable;
 
-    public void SelectEntity(GameObject entity)
+    public void SelectEntity(EntitySelectable entity)
     {
         Debug.Log("Selected" + entity.transform.position);
         InspectorManager.Instance.OpenInspector(entity);
+    }
+
+    public void DeselectEntity()
+    {
+        InspectorManager.Instance.CloseInspector();
     }
 }
