@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class EntityPropertyValueInputBehaviour : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI placeholderText;
+    [SerializeField] private TMP_InputField placeholderText;
+    public bool IsEditing { get; set; } = false;
     private bool _initialized;
     private EntityPropertyBehaviour _entityPropertyBehaviour;
     public void InitializeBehaviour(EntityPropertyBehaviour entityPropertyBehaviour)
@@ -17,6 +18,6 @@ public class EntityPropertyValueInputBehaviour : MonoBehaviour
     private void Update()
     {
         if (!_initialized) return;
-        placeholderText.text = _entityPropertyBehaviour.Value.GetValue();
+        if(!IsEditing) placeholderText.text = _entityPropertyBehaviour.Value.GetValue();
     }
 }
