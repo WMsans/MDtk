@@ -33,7 +33,7 @@ public class InspectorManager : MonoBehaviour
         inspector.SetActive(false);
         _isSelecting = false;
         if(!_selectedEntity) return;
-        _selectedEntity.OnDeselected();
+        _selectedEntity.Deselected();
         _selectedEntity = null;
     }
     public void OpenInspector(EntitySelectable entity)
@@ -42,7 +42,7 @@ public class InspectorManager : MonoBehaviour
         _isSelecting = true;
         if(_selectedEntity)
         {
-            _selectedEntity.OnDeselected();
+            _selectedEntity.Deselected();
             if (entity == _selectedEntity)
             {
                 CloseInspector();
@@ -50,7 +50,7 @@ public class InspectorManager : MonoBehaviour
             }
         }
         _selectedEntity = entity;
-        _selectedEntity.OnSelected();
+        _selectedEntity.Selected();
         OnEntitySelected.Invoke(_selectedEntity);
     }
     private void Update()
@@ -63,8 +63,14 @@ public class InspectorManager : MonoBehaviour
         if (_isSelecting)
         {
             lineRenderer.enabled = true; 
-            DOTween.To(() => lineRenderer.GetPosition(0), x => lineRenderer.SetPosition(0, x), _selectedEntity.transform.position, 0.25f);
-            //lineRenderer.SetPosition(0, _selectedEntity.transform.position);
+            if(Vector2.Distance(_selectedEntity.transform.position, lineRenderer.GetPosition(0)) > 2f)
+            {
+                DOTween.To(() => lineRenderer.GetPosition(0), x => lineRenderer.SetPosition(0, x), _selectedEntity.transform.position, 0.25f);
+            }
+            else
+            {
+                lineRenderer.SetPosition(0, _selectedEntity.transform.position);
+            }
             lineRenderer.SetPosition(1, (Vector2)Camera.main.ScreenToWorldPoint(inspector.transform.position));
         }
         else

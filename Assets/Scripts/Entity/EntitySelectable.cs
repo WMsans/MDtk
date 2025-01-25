@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using DG.Tweening;
 using EPOOutline;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class EntitySelectable : MonoBehaviour
 {
     private Outlinable _outlinable;
     public bool IsHovered { get; private set; } = false;
-
+    public bool IsDragging { get; private set; } = false;
+    public UnityEvent OnHovered;
+    public UnityEvent OnUnhovered;
+    public UnityEvent OnDragging;
+    public UnityEvent OnStoppedDragging;
+    public UnityEvent OnSelected;
+    public UnityEvent OnDeselected;
     public List<EntityProperty<PropertyValue>> properties /*{ get; private set; }*/ = new()
     {
         new()
@@ -25,11 +32,13 @@ public class EntitySelectable : MonoBehaviour
     }
     private void OnMouseOver()
     {
+        if(!IsHovered)OnHovered.Invoke();
         IsHovered = true;
         MouseSelectorManager.Instance.IsSelecting = true;
     }
     private void OnMouseExit()
     {
+        if(IsHovered)OnUnhovered.Invoke();
         IsHovered = false;
         MouseSelectorManager.Instance.IsSelecting = false;
     }
@@ -38,20 +47,39 @@ public class EntitySelectable : MonoBehaviour
     {
         if (IsHovered && !MouseSelectorManager.Instance.IsPointerOverUIElement)
         {
-            SelectThis();
+            IsDragging = true;
+            OnDragging.Invoke();
         }
     }
+    private void OnMouseUp()
+    {
+        if (IsHovered && !MouseSelectorManager.Instance.IsPointerOverUIElement)
+        {
+            SelectThis();
+        }
+        if(IsDragging) OnStoppedDragging.Invoke();
+        IsDragging = false;
+    }
 
+    private void Update()
+    {
+        if(IsDragging)
+        {
+            if (Camera.main != null) transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+    }
     public void SelectThis()
     {
         MouseSelectorManager.Instance.SelectEntity(this);
     }
-    public void OnSelected()
+    public void Selected()
     {
+        OnSelected.Invoke();
         SetOutline(true);
     }
-    public void OnDeselected()
+    public void Deselected()
     {
+        OnDeselected.Invoke();
         SetOutline(false);
     }
     public void AddProperty(EntityProperty<PropertyValue> property)
